@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <ImageView
+        android:id="@+id/image_sale"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="25dp"
+        android:src="@drawable/ic_dollarproduct" />
+
+    <ImageView
+        android:id="@+id/image_item_inventory"
+        android:layout_width="75dp"
+        android:layout_height="75dp"
+        android:scaleType="centerCrop"
+        tools:src="@mipmap/ic_launcher" />
+
+    <TextView
+        android:id="@+id/name_item"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/small_margin_left"
+        android:layout_marginTop="@dimen/very_small_margin_left"
+        android:layout_toRightOf="@id/image_item_inventory"
+        android:textSize="@dimen/medium_text_size"
+        android:textStyle="bold"
+        tools:text="name" />
+
+    <TextView
+        android:id="@+id/price_item"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/name_item"
+        android:layout_marginLeft="@dimen/small_margin_left"
+        android:layout_toRightOf="@id/image_item_inventory"
+        tools:text="price" />
+
+    <TextView
+        android:id="@+id/stock_item"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/price_item"
+        android:layout_marginLeft="@dimen/small_margin_left"
+        android:layout_toRightOf="@id/image_item_inventory"
+        android:textStyle="italic"
+        tools:text="stock" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@id/image_item_inventory"
+        android:background="#d3d3d3" />
+
+</RelativeLayout>
