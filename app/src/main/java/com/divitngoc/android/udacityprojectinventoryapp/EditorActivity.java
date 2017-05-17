@@ -310,7 +310,6 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
             case R.id.action_save:
                 // Save item to inventory database if required field(s) are entered
                 if (saveItem()) {
-                    // Exit activity
                     finish();
                 }
                 return true;
