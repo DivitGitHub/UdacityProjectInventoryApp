@@ -79,7 +79,6 @@ public class InventoryProvider extends ContentProvider {
 
         // If the data at this URI changes, then we know we need to update the Cursor.
         cursor.setNotificationUri(getContext().getContentResolver(), uri);
-
         return cursor;
     }
 
@@ -126,7 +125,6 @@ public class InventoryProvider extends ContentProvider {
         return ContentUris.withAppendedId(uri, id);
     }
 
-
     @Override
     public int delete(Uri uri, String selection, String[] selectionArgs) {
         // Get writeable database
@@ -172,7 +170,6 @@ public class InventoryProvider extends ContentProvider {
                 selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
                 return updateInventory(uri, values, selection, selectionArgs);
             default:
-                //no need to update transaction table as it's our transaction "history" for inventory table.
                 throw new IllegalArgumentException("Update is not supported for " + uri);
         }
     }
@@ -217,6 +214,8 @@ public class InventoryProvider extends ContentProvider {
         return rowsUpdated;
     }
 
+    // Handles requests for the MIME type of the data at the
+    // given URI
     @Override
     public String getType(Uri uri) {
         final int match = sUriMatcher.match(uri);
