@@ -6,7 +6,7 @@ import android.provider.BaseColumns;
 
 public final class InventoryContract {
 
-    //private InventoryContract to prevent an instance of this class
+    // private InventoryContract to prevent an instance of this class
     private InventoryContract() {
     }
 
@@ -47,51 +47,14 @@ public final class InventoryContract {
         public static final String CONTENT_ITEM_TYPE =
                 ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_INVENTORY;
 
-        /**
-         * Name of database table for inventory
-         */
         public static final String TABLE_NAME = "inventory";
 
-        /**
-         * Unique ID number for the inventory.
-         * <p>
-         * Type: INTEGER
-         */
+        // Table columns
         public static final String _ID = BaseColumns._ID;
-
-        /**
-         * Picture of the inventory.
-         * <p>
-         * Type: TEXT
-         */
         public static final String COLUMN_INVENTORY_PICTURE = "picture";
-
-        /**
-         * Name of the pet.
-         * <p>
-         * Type: TEXT
-         */
         public static final String COLUMN_INVENTORY_NAME = "name";
-
-        /**
-         * price of the inventory.
-         * <p>
-         * Type: DOUBLE
-         */
         public static final String COLUMN_INVENTORY_PRICE = "price";
-
-        /**
-         * Supplier email of the inventory.
-         * <p>
-         * Type: TEXT
-         */
         public static final String COLUMN_INVENTORY_SUPPLIER_EMAIL = "supplier_email";
-
-        /**
-         * stock of inventory item.
-         * <p>
-         * Type: TEXT
-         */
         public static final String COLUMN_INVENTORY_STOCK = "stock";
     }
 

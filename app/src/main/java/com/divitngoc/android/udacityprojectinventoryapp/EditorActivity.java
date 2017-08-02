@@ -211,7 +211,7 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
 
         // shows user message of the required fields
         if (flag == false) {
-            Toast.makeText(this, toastMessage + getString(R.string.requires_input), Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, toastMessage + " " +getString(R.string.requires_input), Toast.LENGTH_SHORT).show();
             return flag;
         }
 

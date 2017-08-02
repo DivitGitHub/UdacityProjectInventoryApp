@@ -17,9 +17,10 @@ import android.widget.Toast;
 
 import com.divitngoc.android.udacityprojectinventoryapp.data.InventoryContract;
 
-public class InventoryCursorAdapter extends CursorRecyclerViewAdapter<InventoryCursorAdapter.ViewHolder> {
+public class InventoryCursorAdapter extends RecyclerView.Adapter<InventoryCursorAdapter.ViewHolder> {
 
     private CatalogueActivity activity;
+    private Cursor mCursor;
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         protected ImageView itemImageView;
@@ -38,31 +39,33 @@ public class InventoryCursorAdapter extends CursorRecyclerViewAdapter<InventoryC
         }
     }
 
-    public InventoryCursorAdapter(CatalogueActivity context, Cursor c) {
-        super(context, c);
+    public InventoryCursorAdapter(CatalogueActivity context) {
         this.activity = context;
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder viewHolder, Cursor cursor) {
+    public void onBindViewHolder(ViewHolder viewHolder, int position) {
 
-        final long id;
+        // Exit early when there's no cursor at that position (Check condition)
+        if (!mCursor.moveToPosition(position)) {
+            return;
+        }
 
-        id = cursor.getLong(cursor.getColumnIndex(InventoryContract.InventoryEntry._ID));
+        final long id = mCursor.getLong(mCursor.getColumnIndex(InventoryContract.InventoryEntry._ID));
         // Find the columns of inventory that we're interested in
-        int pictureColumnIndex = cursor.getColumnIndex(InventoryContract.InventoryEntry.COLUMN_INVENTORY_PICTURE);
-        int nameColumnIndex = cursor.getColumnIndex(InventoryContract.InventoryEntry.COLUMN_INVENTORY_NAME);
-        int priceColumnIndex = cursor.getColumnIndex(InventoryContract.InventoryEntry.COLUMN_INVENTORY_PRICE);
-        int stockColumnIndex = cursor.getColumnIndex(InventoryContract.InventoryEntry.COLUMN_INVENTORY_STOCK);
+        int pictureColumnIndex = mCursor.getColumnIndex(InventoryContract.InventoryEntry.COLUMN_INVENTORY_PICTURE);
+        int nameColumnIndex = mCursor.getColumnIndex(InventoryContract.InventoryEntry.COLUMN_INVENTORY_NAME);
+        int priceColumnIndex = mCursor.getColumnIndex(InventoryContract.InventoryEntry.COLUMN_INVENTORY_PRICE);
+        int stockColumnIndex = mCursor.getColumnIndex(InventoryContract.InventoryEntry.COLUMN_INVENTORY_STOCK);
 
         // Read the pet attributes from the Cursor for the current item
-        String imageString = cursor.getString(pictureColumnIndex);
+        String imageString = mCursor.getString(pictureColumnIndex);
 
         Uri imageUri = Uri.parse(imageString);
 
-        String itemName = cursor.getString(nameColumnIndex);
-        Double itemPrice = cursor.getDouble(priceColumnIndex);
-        int itemStock = cursor.getInt(stockColumnIndex);
+        String itemName = mCursor.getString(nameColumnIndex);
+        Double itemPrice = mCursor.getDouble(priceColumnIndex);
+        int itemStock = mCursor.getInt(stockColumnIndex);
 
         //Keep price to two decimal places
         java.text.DecimalFormat df = new java.text.DecimalFormat("#0.00");
@@ -81,24 +84,22 @@ public class InventoryCursorAdapter extends CursorRecyclerViewAdapter<InventoryC
 
         final int stock = itemStock;
         viewHolder.saleImageView.setOnClickListener(new View.OnClickListener() {
+            Toast outOfStockToast;
+
             @Override
             public void onClick(View v) {
                 // only calls this method when stock is above 0
                 if (stock > 0) {
                     activity.onSaleClick(id, stock);
                 } else {
-                    final Toast outOfStockToast = Toast.makeText(activity.getApplicationContext(), activity.getString(R.string.out_of_stock), Toast.LENGTH_SHORT);
-                    outOfStockToast.show();
 
                     //To stop toast message queuing up if user spam clicks sale button
-                    Handler handler = new Handler();
-                    handler.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            outOfStockToast.cancel();
-                        }
-                    }, 1000);
+                    if (outOfStockToast != null) {
+                        outOfStockToast.cancel();
+                    }
 
+                    outOfStockToast = Toast.makeText(activity.getApplicationContext(), activity.getString(R.string.out_of_stock), Toast.LENGTH_SHORT);
+                    outOfStockToast.show();
                 }
             }
         });
@@ -110,6 +111,18 @@ public class InventoryCursorAdapter extends CursorRecyclerViewAdapter<InventoryC
                 activity.onItemClick(id);
             }
         });
+    }
+
+    public void swapCursor(Cursor newCursor) {
+        mCursor = newCursor;
+
+        // notifyDataSetChanged to tell the RecyclerView to update
+        notifyDataSetChanged();
+    }
+
+    @Override
+    public int getItemCount() {
+        return mCursor.getCount();
     }
 
     @Override

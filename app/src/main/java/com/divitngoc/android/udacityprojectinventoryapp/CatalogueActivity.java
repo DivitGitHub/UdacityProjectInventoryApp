@@ -6,6 +6,7 @@ import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.LoaderManager;
@@ -19,6 +20,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.divitngoc.android.udacityprojectinventoryapp.data.InventoryContract;
 import com.divitngoc.android.udacityprojectinventoryapp.data.InventoryContract.*;
 
 public class CatalogueActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
@@ -29,7 +31,6 @@ public class CatalogueActivity extends AppCompatActivity implements LoaderManage
     private static final int INVENTORY_LOADER = 0;
 
     private View emptyView;
-
     private RecyclerView.LayoutManager mLayoutManager;
 
     /**
@@ -43,7 +44,8 @@ public class CatalogueActivity extends AppCompatActivity implements LoaderManage
         setContentView(R.layout.activity_catalogue);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        //when the fab button is clicked, the activity is moved to the AddAnItemActivity
+
+        // When the fab button is clicked, the activity is moved to the AddAnItemActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -60,7 +62,7 @@ public class CatalogueActivity extends AppCompatActivity implements LoaderManage
         mLayoutManager = new LinearLayoutManager(CatalogueActivity.this);
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setHasFixedSize(true);
-        mCursorAdapter = new InventoryCursorAdapter(this, null);
+        mCursorAdapter = new InventoryCursorAdapter(this);
 
         //Populate the list with cursor
         recyclerView.setAdapter(mCursorAdapter);
@@ -168,13 +170,13 @@ public class CatalogueActivity extends AppCompatActivity implements LoaderManage
         } else {
             emptyView.setVisibility(View.GONE);
         }
-
         mCursorAdapter.swapCursor(data);
     }
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
-        // Callback called when the data needs to be deleted
+        // Since this Loader's data is now invalid, clear the Adapter that is
+        // displaying the data
         mCursorAdapter.swapCursor(null);
     }
 

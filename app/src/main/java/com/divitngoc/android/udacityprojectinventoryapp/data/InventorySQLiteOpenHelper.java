@@ -11,14 +11,7 @@ public class InventorySQLiteOpenHelper extends SQLiteOpenHelper {
 
     private static final String LOG_TAG = InventorySQLiteOpenHelper.class.getSimpleName();
 
-    /**
-     * Name of the database file
-     */
     private static final String DATABASE_NAME = "inventories.db";
-
-    /**
-     * Database version. If you change the database schema, you must increment the database version.
-     */
     private static final int DATABASE_VERSION = 1;
 
     /**
@@ -46,5 +39,9 @@ public class InventorySQLiteOpenHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        // FOR TESTING ONLY
+        db.execSQL("DROP TABLE IF EXISTS " + InventoryEntry.TABLE_NAME);
+        onCreate(db);
     }
+
 }
