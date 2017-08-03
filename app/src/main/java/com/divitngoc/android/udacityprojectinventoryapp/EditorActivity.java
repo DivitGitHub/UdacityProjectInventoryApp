@@ -13,6 +13,7 @@ import android.support.v4.app.NavUtils;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -177,42 +178,25 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
      * Get user input from editor and save item into database.
      */
     private boolean saveItem() {
-
-        //flag to check if all fields have input required
-        boolean flag = true;
-
         String nameString = mNameView.getText().toString().trim();
         String priceString = mPriceView.getText().toString().trim();
         String supplierEmailString = mSupplierEmailView.getText().toString().trim();
         String stockString = mStockView.getText().toString().trim();
 
-
         String toastMessage = "";
         // checking if all the fields in the editor needs input
         if (imageUri == null) {
-            toastMessage += "Image";
-            flag = false;
+            toastMessage += getString(R.string._image);
         }
 
-        if (TextUtils.isEmpty(nameString)) {
-            toastMessage = makeRequiresMessage(toastMessage, getString(R.string.name), getString(R.string._name));
-            flag = false;
-        }
-
-        if (TextUtils.isEmpty(supplierEmailString)) {
-            toastMessage = makeRequiresMessage(toastMessage, getString(R.string.supplier_email_address), getString(R.string._supplier_email_address));
-            flag = false;
-        }
-
-        if (TextUtils.isEmpty(priceString)) {
-            toastMessage = makeRequiresMessage(toastMessage, getString(R.string.price), getString(R.string._price));
-            flag = false;
-        }
+        toastMessage = checkIfFieldAreEmpty(nameString, toastMessage, getString(R.string.name), getString(R.string._name));
+        toastMessage = checkIfFieldAreEmpty(supplierEmailString, toastMessage, getString(R.string.supplier_email_address),  getString(R.string._supplier_email_address));
+        toastMessage = checkIfFieldAreEmpty(priceString, toastMessage,getString(R.string.price), getString(R.string._price));
 
         // shows user message of the required fields
-        if (flag == false) {
+        if (!TextUtils.isEmpty(toastMessage)) {
             Toast.makeText(this, toastMessage + " " +getString(R.string.requires_input), Toast.LENGTH_SHORT).show();
-            return flag;
+            return false;
         }
 
         double price = Double.parseDouble(priceString);
@@ -266,11 +250,18 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
                         Toast.LENGTH_SHORT).show();
             }
         }
-        return flag;
+        return true;
+    }
+
+    private String checkIfFieldAreEmpty(String field, String toastMessage, String ifEmpty, String notEmpty) {
+        if (TextUtils.isEmpty(field)) {
+            toastMessage = makeRequireMessage(toastMessage, ifEmpty, notEmpty);
+        }
+        return toastMessage;
     }
 
     //function for toast message
-    private String makeRequiresMessage(String toastMessage, String ifEmpty, String notEmpty) {
+    private String makeRequireMessage(String toastMessage, String ifEmpty, String notEmpty) {
         if (TextUtils.isEmpty(toastMessage)) {
             toastMessage += ifEmpty;
         } else {
