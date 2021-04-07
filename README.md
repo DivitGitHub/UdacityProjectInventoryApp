@@ -1,6 +1,6 @@
 # UdacityProjectInventoryApp
 
-Here is an application for the Udacity Android Basics Inventory Project. This applications keeps track of their items/products in a list(RecyclerView).
+Here is an application for the Udacity Android Basics Inventory Project. This applications keeps track of their items/products in a list (RecyclerView).
 
 ## PROJECT SPECIFICATION
 
